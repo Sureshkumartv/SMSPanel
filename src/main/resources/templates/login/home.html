@@ -1,0 +1,60 @@
+<html lang="en" class="no-js">
+    <div th:replace="login/head :: head">...</div>
+
+    <body>
+        <div class="app" id="app">
+            <div class="center-block w-xxl w-auto-xs p-y-md">
+                <div class="navbar">
+                </div>
+
+                <div id="primary" class="p-a-md box-color r box-shadow-z1 text-color m-a" style="display: block">
+                    <div th:if="${param.error}">Invalid username and password.</div>
+			<div th:if="${param.logout}">You have been logged out.</div>
+                    <form action="#" th:action="@{/login}" th:object="${loginBean}" method="post">
+                        <div class="m-b text-sm">
+                            Sign in
+                        </div>
+
+                        <div class="md-form-group float-label">
+                            <input name="username" type="name" class="md-input" ng-model="user.name" required="true"/>
+                            <label>Username</label>
+                        </div>
+                        <div class="md-form-group float-label">
+                            <input name="password" type="password" class="md-input" ng-model="user.password" required="true"/>
+                            <label>Password</label>
+                            <span class="errors" id="pwd">
+
+                            </span>
+                        </div>      
+                        <div class="m-b-md">        
+                            <label class="md-check">
+                                <a ui-sref="login" onclick="changeToForgetPwd();">Forgot password?</a>
+                            </label>
+                        </div>
+                        <input name="method:login" type="submit" class="btn primary btn-block p-x-md" value="Log in"/><br/>
+                    </form>
+
+                </div>
+                <!--                <div id="secondary" class="p-a-md box-color r box-shadow-z1 text-color m-a" style="display: none">
+                                    <form method="post" name="register" action="login.action" namespace="/">
+                                        <div class="m-b text-sm">
+                                            <strong>Please Enter UserID </strong><br/>
+                                            <p> <strong>Password will be send to your registered Mobile Number</strong></p>
+                                        </div>
+                                        <div class="md-form-group float-label">
+                                            <input name="userID" type="userID" class="md-input" ng-model="user.id" required>
+                                            <label>Enter UserID</label>
+                                        </div>
+                                        <div class="m-b-md">        
+                                            <label class="md-check">
+                                                <a ui-sref="login" onclick="changeToLogin()" >Back</a>
+                                            </label>
+                                        </div>
+                                        <input name="method:changePwd" type="submit" class="btn primary btn-block p-x-md" value="Send">
+                                    </form>
+                                </div>-->
+            </div>
+                <div th:replace="login/footer :: footer">...</div>
+            </div>
+    </body>
+</html>

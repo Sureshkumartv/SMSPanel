@@ -1,0 +1,55 @@
+<div th:fragment="menu" >
+    <!-- Start of the menu  -->
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+<!--                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search..."/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                     /input-group 
+                </li>-->
+               <!--  <li>
+                    <a href="#"><i class="glyphicon glyphicon-stats icon text-primary-dker"></i> Dashboard</a>
+                </li>  -->
+				<li><a href="sendsms.htm"><i class="glyphicon glyphicon-envelope icon text-info-lter"></i>
+						Send Sms</a></li>
+				<li th:if="${#authentication.principal.userType != 4}">
+                    <a href="viewusers.htm"><i class="glyphicon glyphicon-list"></i> User(s)</a>
+                </li>
+                <li>
+                    <a href="viewsenderids.htm"><i class="fa fa-wechat fa-television"></i> SenderId(s)</a>
+                </li>
+                <li>
+                    <a href="viewgroup.htm"><i class="fa fa-wechat fa-user-circle"></i> Group(s)</a>
+                </li>
+                <!-- <li>
+                    <a href="viewcontacts.htm"><i class="fa fa-wechat fa-fw"></i>Contact(s)</a>
+                </li> -->
+                <li >
+                    <a href="viewscheduled.htm"><i class="fa fa-clock-o fa-fw"></i> Reports </a>
+                </li>
+                 <li>
+                    <a href="apidocs.htm"><i class="glyphicon glyphicon-edit"></i> API Document</a>
+                </li>
+                <!--<li>
+                    <a href="#"><i class="fa fa-folder-open fa-fw"></i> Manage Drafts</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-credit-card fa-fw"></i>Logs</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-credit-card fa-fw"></i>IN-QUEUE</a>
+                </li> -->
+
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+    <!-- End of the menu  -->
+</div>

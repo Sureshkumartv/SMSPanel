@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div th:fragment="footer" >
+    <!-- Start of the footer  -->
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <!--<script th:src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script th:src="@{/mainpages/vendor/bootstrap/js/bootstrap.min.js}" src="../../../../../mainpages/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <script th:src="@{/mainpages/vendor/bootstrap/js/bootstrap-datetimepicker.min.js}" src="../../../../../mainpages/vendor/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script th:src="@{/mainpages/dist/js/dcalendar.picker.js}" src="../../../../../mainpages/dist/js/dcalendar.picker.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+        $(function () {
+            $('[data-toggle="popover1"]').popover()
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $("#filterby").change(function () {
+            $("#" + this.value).show().siblings().hide();
+        });
+
+        $("#filterby").change();
+
+    </script>
+
+
+    <script>
+        $('#start-date').dcalendarpicker();
+        $('#end-date').dcalendarpicker();
+        $('#calendar-demo').dcalendar(); //creates the calendar
+    </script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script th:src="@{/mainpages/vendor/metisMenu/metisMenu.min.js}" src="../../../../../mainpages/vendor/metisMenu/metisMenu.min.js"></script>
+    
+    <script th:src="@{/mainpages/js/block-ui/angular-block-ui.min.js}" src="../../../../../mainpages/js/block-ui/angular-block-ui.min.js"></script>
+    <script th:src="@{/mainpages/vendor/bootstrap/js/angular-dropdownMultiselect.js}" src="../../../../../mainpages/vendor/bootstrap/js/angular-dropdownMultiselect.js"></script>
+    
+    <!-- <script type="text/javascript" src="../date/jquery.simple-dtpicker.js"></script> -->
+    <!-- Morris Charts JavaScript -->
+    <!-- <script th:src="@{/mainpages/vendor/raphael/raphael.min.js}" src="../../../../../mainpages/vendor/raphael/raphael.min.js"></script>
+
+    <script th:src="@{/mainpages/vendor/morrisjs/morris.min.js}" src="../../../../../mainpages/vendor/morrisjs/morris.min.js"></script> -->
+
+    <!-- <script th:src="@{/mainpages/data/morris-data.js}" src="../../../../../mainpages/data/morris-data.js"></script> -->
+
+
+    <!-- Custom Theme JavaScript -->
+    <!-- <script th:src="@{/mainpages/js/angular.min.js}" src="../../../../../mainpages/js/angular.min.js"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+    
+        <script th:src="@{/mainpages/js/ui-bootstrap-tpls-0.13.3.js}" src="../../../../../mainpages/js/ui-bootstrap-tpls-0.13.3.js"></script> -->
+    <!-- End of the footer  -->
+</div>
+
+

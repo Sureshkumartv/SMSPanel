@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<style>
+img {
+	max-width: 100%;
+	/* just in case, to force correct aspet ratio */
+	height: auto !important;
+}
+
+video {
+	max-width: 100%;
+	/* just in case, to force correct aspect ratio */
+	height: auto !important;
+}
+</style>
+
+	<div th:switch="${type}">
+		<span th:case="1"><img th:src="${image}" /></span> 
+		<span th:case="2"><video id="sampleMovie"  th:src="/b/4" preload></video></span>
+	</div>
+</body>
+</html>
+
+

@@ -1,0 +1,49 @@
+<div th:fragment="head" >
+    <!-- Start of the footer  -->
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>SMS Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <link th:href="@{/loginpages/css/animate.min.css}" href="../../../../loginpages/css/animate.min.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/glyphicons.css}" href="../../../../loginpages/css/glyphicons.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/font-awesome.min.css}" href="../../../../loginpages/css/font-awesome.min.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/material-design-icons.css}" href="../../../../loginpages/css/material-design-icons.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/bootstrap.min.css}" href="../../../../loginpages/css/bootstrap.min.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/app.css}" href="../../../../loginpages/css/app.css" rel="stylesheet"/>
+        <link th:href="@{/loginpages/css/font.css}" href="../../../../loginpages/css/font.css" rel="stylesheet"/>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script>
+            function changeToForgetPwd() {
+                try {
+                    $("#primary").hide();
+                    $("#secondary").show();
+                } catch (ex) {
+                }
+            }
+            function changeToLogin() {
+                $("#primary").show();
+                $("#secondary").hide();
+            }
+        </script>
+        <style>
+            .errors{
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <!-- End of the footer  -->
+</div>

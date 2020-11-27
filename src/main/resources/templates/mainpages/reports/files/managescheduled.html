@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+
+
+    <div th:replace="mainpages/layout/mainhead :: head">...</div>
+    
+
+    <body ng-app="scheduledApp" ng-controller="ScheduledCntrl as ctrl">
+
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <div th:replace="mainpages/layout/mainheader :: header">...</div>
+            <div th:replace="mainpages/layout/mainmenu :: menu">...</div>
+
+            <div id="page-wrapper" >
+                <!-- /.row -->
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row" >
+                
+                    <div class="col-lg-12">
+                        <!--                        <a href="javascript:void();" class="pull-left search-icon" data-toggle="modal" data-target=".add-user" title="Add User">
+                                                    <i class="fa fa-user-plus"></i>
+                                                </a>-->
+                        <!--                        <a href="javascript:void();" class="search-icon pull-left" data-toggle="modal" data-target=".upload-data" title="Upload File">
+                                                    &emsp;<i class="fa fa-upload nrml"></i>
+                                                </a>-->
+                        <a href="javascript:void();" class="pull-right search-icon" title="Download">
+                            <i class="fa fa-download nrml"></i> 
+                        </a>
+                        <a href="javascript:void();" class="pull-right search-icon" data-toggle="modal" data-target=".filter" title="Filter">
+                            <i class="fa fa-filter nrml"></i>&emsp;
+                        </a>
+                    </div>
+                    
+                    </div>
+                    <div class="row">
+                    &nbsp;
+                </div>
+              	<ul class="nav nav-tabs">
+				  <li class="active"><a data-toggle="tab" href="#webreports">Web Reports</a></li>
+				  <li><a data-toggle="tab" href="#httpreports">Http Reports</a></li>
+				</ul>
+                
+                <div class="tab-content">
+	                <div id="webreports" class="tab-pane fade in active">
+	                     <br/>
+	                    <div class="col-lg-12 table-responsive">
+	                        <table class="table table-striped table-bordered"  >
+	                            <thead>
+	                                <tr>
+	                                    <th width="5%">S.NO</th>
+	                                    <th width="5%">USERNAME</th>
+	                                    <th width="11%">SCHEDULED</th>
+	                                    <th width="11%">SUBMITTED</th>
+	                                    <th width="30%">MESSAGE</th>
+	                                    <th width="5%">CREDITS</th>
+	                                    <th width="5%">SENDERID</th>
+	                                    <th width="5%">ROUTE</th>
+	                                    <th width="8%">STATUS</th>
+	                                    <th width="10%">SETTINGS</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody ng-repeat='sms in scheduled.content| filter:search'>
+	                                <tr ng-if='client == activeClient'>
+	                                    <td align="center"> {{$index + 1}}</td>
+	                                    <td class="text-xs-center">{{  sms.users.username}}</td>
+	                                    <td class="text-xs-center">{{sms.excelScheduleDate| date:'MM/dd/yyyy h:mma'}}</td>
+	                                    <td class="text-xs-center">{{sms.excelUploadedDate| date:'MM/dd/yyyy h:mma'}}</td>
+	                                    <td class="text-xs-center"> <span class="tip" title="{{sms.commonMessage}}"> {{ sms.commonMessage | limitTo: 30 }}{{sms.commonMessage.length > 30 ? '...' : ''}}</span>
+	                                    </td>
+	                                    <td class="text-xs-center">{{ sms.creditsDetected}}</td>
+	                                    <td class="text-xs-center">{{ sms.senderid.sendername}}</td>
+	                                    <td class="text-xs-center">{{ sms.esmeInfo.systemid}}</td>
+	                                    <td class="text-xs-center">
+	                                        <span id="mobile"  ng-if="sms.excelStatus === 'C'">COMPLETED</span><span id="mobile"  ng-if="sms.excelStatus === 'P'">PROCESSING</span><span id="mobile"  ng-if="sms.excelStatus === 'W'">WAITING</span>
+	                                    </td>
+	                                    <td align="center">
+	                                        <a href="javascript:void();"  ng-click="loadScheduledHistory(sms.excelSno)" data-toggle="modal" data-target=".bs-example-modal-sm" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a> &emsp;
+	                                        <!--<a href="javascript:void();" tabindex="0" role="button" data-toggle="popover" data-placement="left" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?" class="btn btn-primary btn-xs"><i class="fa fa-info"></i></a> &emsp;--> 
+	                                        <a href="javascript:void();" data-toggle="modal" ng-click="setExcelSno(sms.excelSno)" data-target=".download-data" class="btn btn-warning btn-xs"><i class="fa fa-download"></i></a>
+	                                    </td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+	                        <pager total-items="scheduled.totalElements"  ng-model="currentPage" ng-change="pageChanged()" items-per-page="scheduled.numberOfElements"></pager>
+	                    </div>
+	                </div>
+	                
+	                <div id="httpreports" class="tab-pane fade">
+	                     <br/>
+	                    <div class="col-lg-12 table-responsive">
+	                        <table class="table table-striped table-bordered"  >
+	                            <thead>
+	                                <tr>
+	                                    <th width="5%">S.NO</th>
+	                                    <th width="5%">USERNAME</th>
+	                                    <th width="11%">SUBMITTED</th>
+	                                    <th width="5%">SENDERID</th>
+	                                    <th width="5%">COUNT</th>
+	                                    <th width="8%">STATUS123</th>
+	                                    <th width="10%">SETTINGS</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody ng-repeat='sms in httpscheduled.pageItems| filter:search'>
+	                                <tr ng-if='client == activeClient'>
+	                                    <td align="center"> {{$index + 1}}</td>
+	                                    <td class="text-xs-center">{{sms.userName}}</td>
+	                                    <td class="text-xs-center">{{sms.insertDate| date:'MM/dd/yyyy h:mma'}}</td>
+	                                    <td class="text-xs-center">{{ sms.senderId}}</td>
+	                                    <td class="text-xs-center">{{ sms.count}}</td>
+	                                    <td class="text-xs-center">
+	                                        <span id="mobile"  ng-if="sms.excelStatus === 'C'">COMPLETED</span><span id="mobile"  ng-if="sms.excelStatus === 'P'">PROCESSING</span><span id="mobile"  ng-if="sms.excelStatus === 'W'">WAITING</span>
+	                                    </td>
+	                                    <td align="center">
+	                                        <a href="javascript:void();"  ng-click="loadHttpHistory(sms.insertDate)" data-toggle="modal" data-target=".bs-example-modal-sm" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a> &emsp;
+	                                        <!--<a href="javascript:void();" tabindex="0" role="button" data-toggle="popover" data-placement="left" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?" class="btn btn-primary btn-xs"><i class="fa fa-info"></i></a> &emsp;--> 
+	                                        <a href="javascript:void();" data-toggle="modal" ng-click="setDate(sms.insertDate)" data-target=".download-data" class="btn btn-warning btn-xs"><i class="fa fa-download"></i></a>
+	                                    </td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+	                        <pager total-items="scheduled.totalElements"  ng-model="currentPage" ng-change="pageChanged()" items-per-page="scheduled.numberOfElements"></pager>
+	                    </div>
+	                </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /#page-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <!-- Model -->
+        <div class="modal fade filter" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Filter</h4>
+                    </div>
+                    <div class="model-body">
+                        <div class="col-xs-2 padd-sm">
+                            <label>Status</label>
+                            <select class="search-form">
+                                <option>All</option>
+                                <option>Waiting</option>
+                                <option>Completed</option>
+                                <option>Process</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 padd-sm">
+                            <label>Filter by</label>
+                            <select class="search-form" id="filterby">
+                                <option>All</option>
+                                <option value="scheduledate">Schedule Date</option>
+                                <option>Created Date</option>
+                                <option value="senderid">Sender ID</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 no-padd" id="datas">
+                            <div class="col-xs-12 no-padd" id="scheduledate">
+                                <div class="col-xs-6 padd-sm">
+                                    <label>Start Date</label><input type="" placeholder="" class="search-form" id="start-date"/></div>
+                                <div class="col-xs-6 padd-sm">
+                                    <label>End Date</label><input type="" placeholder="" class="search-form" id="end-date"/></div>
+                            </div>
+                            <div class="col-xs-6 padd-sm" id="senderid" style="display:none;">
+                                <label>Search Value</label><input type="" placeholder="" class="search-form" id="start-date"/></div>
+                        </div>
+                        <div class="col-sm-2 padd-sm">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-success col-sm-12"><i class="fa fa-search"></i> Find</button>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Model -->
+        <div class="modal fade download-data" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Filter</h4>
+                    </div>
+                    <div class="model-body">
+                        <div class="col-xs-12" align="center"><br/>
+                            <h4>Do you want to download</h4>
+                            <a target="_blank" href="viewhistory/downloadexcelhistory.htm?excelsno={{excelSno}}&amp;dateMillis={{date}}" >
+                            	<button class="btn btn-success col-sm-3 col-sm-offset-2" ng-click="hideModal()">Yes</button></a>                            <button class="btn btn-danger col-sm-3 col-sm-offset-2" data-dismiss="modal">No</button>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Model -->
+        <div class="modal fade credits" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Credits</h4>
+                    </div>
+                    <div class="model-body">
+                        <div class="col-xs-12"><br/>
+                            <label>User Name:</label>
+                            <div class="clearfix"></div><br/>
+                            <input type="checkbox" name="mycheckbox" th:checked="${flag} ? 'checked'">Add</input>
+                            <input type="radiobutton" name="add"/> Add &emsp;
+                            <input type="radiobutton" name="delete"/> Delete
+                            <div class="clearfix"></div><br/>
+                            <div class="col-sm-12 no-padd" id="add">
+                                <div class="col-sm-4 padd-sm"><label>Credits</label></div><div class="col-sm-8 padd-sm"><input type="text" class="search-form"/></div>
+                                <div class="clearfix"></div><br/>
+                                <div class="col-sm-4 padd-sm"><label>Price</label></div><div class="col-sm-8 padd-sm"><input type="text" class="search-form"/></div>
+                                <div class="clearfix"></div><br/>
+                                <div class="col-sm-4 padd-sm"><label>Desp</label></div><div class="col-sm-8 padd-sm"><textarea rows="4" class="col-sm-12"></textarea></div>
+                                <div class="clearfix"></div><br/>
+                                <button class="btn btn-success pull-right">Submit</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Model -->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delivery Report</h4>
+                    </div>
+                    <div class="model-body">
+                        <div class="col-lg-12 table-responsive table-scroll">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>S.NO</th>
+                                        <th>MOBILE</th>
+                                        <th>MESSAGE</th>
+                                        <th>SENDERID</th>
+                                        <th>SUBMITEDON</th>
+                                        <th>DELIVEREDON</th>
+                                        <th>STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="entry in history" >
+                                        <td align="center">{{$index + 1}}</td>
+                                        <td align="left">{{entry.msisdn}}</td>
+                                        <td align="left">{{ entry.message | limitTo: 35 }}{{entry.message.length > 35 ? '...' : ''}}</td>
+                                        <td>{{entry.senderid.sendername}}</td>
+                                        <td align="left">{{entry.insertedDate| date:'MM/dd/yyyy h:mma'}}</td>
+                                        <td align="left">{{entry.smsResponseReceiveDate| date:'MM/dd/yyyy h:mma'}}</td>
+                                        <td align="left">
+                                            <span id="smsStatus"  ng-if="entry.smsStatus === 'C'">SUBMITTED</span>
+                                            <span id="smsStatus"  ng-if="entry.smsStatus === 'DELIV'">DELIVERED</span>
+                                            <span id="smsStatus"  ng-if="entry.smsStatus === 'UNDEL'">UNDELIVERED</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Model -->
+        <div class="modal fade test" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delivery Report</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="col-lg-12 table-responsive table-scroll">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>S.NO</th>
+                                        <th>MOBILE</th>
+                                        <th>MESSAGE</th>
+                                        <th>SENDERID</th>
+                                        <th width="13%">SUBMITED ON</th>
+                                        <th width="13%">DELIVERED ON</th>
+                                        <th>STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td align="center">1</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">2</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">3</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">4</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">5</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">6</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">7</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">8</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">9</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">10</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">11</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">12</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">13</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">14</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">15</td>
+                                        <td align="center">16-06-17</td>
+                                        <td align="center">12-06-17</td>
+                                        <td>AD DISCUSSED YESTERDAY, WE MUST DO...</td>
+                                        <td align="center">125</td>
+                                        <td align="center">CATCH</td>
+                                        <td align="center">Completed</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Model -->
+
+
+
+    </body>
+
+    <div th:replace="mainpages/layout/mainfooter :: footer">...</div>
+    <script th:src="@{/mainpages/js/scheduled/scheduledapp.js}"></script>
+</html>
+

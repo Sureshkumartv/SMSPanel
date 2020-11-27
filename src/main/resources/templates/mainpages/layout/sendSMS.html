@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <div th:replace="mainpages/layout/mainhead :: head">...</div>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+<script>
+    google.load("elements", "1", {
+        packages: "transliteration"
+    });
+</script>  
+    <!-- <script type="text/javascript" src="https://www.google.com/jsapi?autoload=%7Bmodules%3A%5B%7Bname%3Aelements%2Cversion%3A1.0%2Cpackages%3A%5B+transliteration%5D%2Ccallback%3A%5BonLoad%5D%7D%5D%7D"></script> -->
+    <body ng-app="smsApp" ng-controller="smsController as $ctrl">
+
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+               <!--  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img width="50%;" src="../sms-logo.png"></img></a>
+                </div> -->
+                <!-- /.navbar-header -->
+
+                <div th:replace="mainpages/layout/mainheader :: header">...</div>
+                <!-- /.navbar-top-links -->
+
+                <div th:replace="mainpages/layout/mainmenu :: menu">...</div> 
+                <!-- /.navbar-static-side -->
+            </nav>
+
+            <div id="page-wrapper">
+                <!-- /.row -->
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="form-group select-lang">
+                                        <div class="col-lg-6">
+                                            <select class="form-control" name="obj.senderId" ng-model="obj.senderId"
+                                        ng-options="senderid.senderid as senderid.sendername for senderid in senderids">
+                                                <option  value="">Select Sender ID </option>
+                                                <!-- <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option> -->
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-lg-6" th:if="${#authentication.principal.userType == 1 || #authentication.principal.userType == 2 }">
+                                            <select class="form-control" name="obj.smppId" ng-model="obj.smppId"
+                                        ng-options="smppid.id as smppid.systemid for smppid in smppids">
+                                                <option  value="">Select Smpp ID</option>
+                                                 <!--<option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option> -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear-fix"></div>
+                                <!-- /.panel-heading -->
+                                <div class="panel-body">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-pills">
+                                    	<input type="text" ng-hide="true" ng-model="obj.filepath"/>
+                                        <li class="active"><a href="#home-pills" ng-click="obj.type = 'number'" data-toggle="tab">Numbers</a>
+                                        </li>
+                                        <li><a href="#messages-pills"  ng-click="obj.type = 'group'; getGroups()" data-toggle="tab">Group</a>
+                                        </li>
+                                         <li><a href="#profile-pills" ng-click="obj.type= 'file'; file = ''"  data-toggle="tab">Upload</a>
+                                        </li>
+                                        <li><a href="#custom-pills" ng-click="obj.type = 'file'; customfile=''" data-toggle="tab">Custom SMS</a>
+                                        </li> 
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="home-pills">
+                                            <textarea class="form-control" rows="7" ng-model="obj.smsMsisdn" ng-change="count(obj.smsMsisdn, true)" placeholder="Numbers must be Comma" ></textarea> 
+                                            <p style="margin-bottom: 0;" class="text-primary">No. of Mobile numbers : {{mobilecnt}}</p>                                   
+                                        </div>
+                                        <div class="tab-pane fade" id="messages-pills">
+                                            <div class="form-group">
+                                            <dropdown-multiselect dropdown-options="groups" dropdown-selected="dropdownSelected()" dropdown-config="config" dropdown-trackby="groupsno" model="selectedgroups">
+                                            </dropdown-multiselect>
+                                            
+                                                <!-- <select class="form-control">
+                                                    <option>Select Group</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select> -->
+                                            </div>
+                                            <textarea class="form-control" rows="7" placeholder="Groups Contacts"  ng-change="count(obj.groupnumbers, true)" ng-model="obj.groupnumbers"></textarea>
+											<p style="margin-bottom: 0;" class="text-primary">No. of Mobile numbers : {{mobilecnt}}</p>
+                                        </div>
+                                         <div class="tab-pane fade" id="profile-pills">
+		                                    <div class="form-group">
+		                                        <label>File input</label>
+		                                        <input type="file" name="file" id="file"  file-model="file" class="inputfile inputfile-5 file" data-multiple-caption="files selected"/>
+		                                        <p style="margin-bottom: 0;" class="text-primary">Upload TXT/XLS/XLSX/CSV files only</p>
+		                                    </div>
+		                                </div>
+                                       <div class="tab-pane fade" id="custom-pills" align="center">
+											<div class="border-box">
+												<div class="form-group">
+													<img src="../images/upload-files.jpg" width="80"/>
+													<!-- <label>File input</label> -->
+													<label for="customfile">Select file</label>
+													<input type="file" class="upload-file" name="customfile" ng-file-select="customfile" file-model="customfile"  id="customfile"/>
+													<p style="margin-bottom: 0; margin-top: 10px; color:#ccc;" class="text-primary">XLS/XLSX/CSV Files Only</p>
+													<button class="btn btn-default btn-sm" id="upload-file" ng-click="uploadCustomSms()"><i class="fa fa-paper-plane"></i> Submit</button>
+												</div>
+												<div class="panel panel-info" ng-show="customsms.length > 0">
+							                        <div class="panel-heading">
+							                            EXcel Sample Data
+							                        </div>
+							                        <!-- /.panel-heading -->
+							                        <div class="panel-body">
+							                            <div class="table-responsive">
+							                                <table class="table table-striped">
+							                                    <thead>
+							                                        <tr>
+							                                        	<th ng-repeat="obj in customsms[0]" style="color:red;text-decoration: underline;" ng-click="custommsg(obj)">{{obj}}</th>
+							                                        </tr>
+							                                    </thead>
+							                                    <tbody>
+							                                    
+							                                    	<tr ng-repeat="(key, value) in customsms"  ng-if="!$first">
+							                                    		<td ng-repeat="obj in value track by $index" >{{obj}}</td>
+							                                    		<!-- <td>{{items}}</td> -->
+							                                    	</tr>
+							                                    </tbody>
+							                                </table>
+							                            </div>
+							                            <!-- /.table-responsive -->
+							                        </div>
+							                        <!-- /.panel-body -->
+							                    </div>
+											</div>
+		                                </div>
+                                    </div>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                            <!-- /.panel -->
+                        </div>
+                        <!-- /.panel -->
+                        <div class="row">
+                            <div class="panel panel-info box-2"  id="your-message">
+                                <div class="panel-heading">
+                                    <i class="fa fa-envelope fa-fw"></i> Your Message
+                                    <span class="visible-xs"><div class="clearfix"></div><br/></span>
+                                    <div class="pull-right">
+                                        <div class="btn-group">
+                                            <a href="#one" data-toggle="modal" type="button" class="btn btn-default btn-xs" ng-hide="true"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                            <!-- <input type="file"  name="file" id="file"  file-model="file" class="inputfile inputfile-5 file" data-multiple-caption="files selected"></input> -->
+                                            <!-- <label for="file">
+                                                <a type="button" id="filelink" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-paperclip"></span></a></label> -->
+                                            <input type="file"  ng-hide="true" name="image" file-model="image"  id="image" class="inputfile inputfile-5 image" data-caption="files selected"></input>
+                                            <label for="image"  ng-hide="true">
+                                                <a type="button" id="imagelink" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-picture"></span></a></label>
+                                            <input type="file"  ng-hide="true" name="video" file-model="video"  id="video" class="inputfile inputfile-5 video" data-caption="files selected"></input>
+                                            <label for="video"  ng-hide="true">
+                                                <a type="button" id="videolink" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-link"></span></a></label>
+											
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="one" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                            <h4 class="modal-title" id="myModalLabel">Location</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d487295.02532044525!2d78.12785129924684!3d17.41215307568293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C+Telangana!5e0!3m2!1sen!2sin!4v1483014227240" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Get Shortcode</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                </div>
+                                                <!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- /.modal -->
+                                        </div>
+                                        <div class="btn-group"  style="margin-top: -5px;">
+                                        	<select name="test" ng-change="langChange()" ng-init="langtypes = [{'value' : 1, 'name' : 'English' },  { 'value' : 2 , 'name' : 'Others'} ]; obj.messageType = 1" ng-model="obj.messageType" ng-options="lang.value as lang.name for lang in langtypes">
+                                        	
+                                        		<option value="0">Select</option>
+                                        	
+                                        	</select>
+                                           <!--  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                English
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                <li><a href="#">English</a>
+                                                </li>
+                                                <li><a ng-href="javascript:">Other</a>
+                                                </li>
+                                            </ul> -->
+                                        </div>
+                                         <div class="btn-group" style="margin-top: -5px;" >
+                                         
+                                         	<div id="showLangControls"></div>
+                                         
+	                                        <!-- <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+	                                            English
+	                                            <span class="caret"></span>
+	                                        </button>
+	                                        <ul class="dropdown-menu pull-right" role="menu">
+	                                            <li><a href="#">English</a>
+	                                            </li>
+	                                            <li><a href="#">Other</a>
+	                                            </li>
+	                                        </ul> -->
+	                                    </div>
+										<div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div class="panel-body">
+                                	
+                               		<div style="margin-top: 10px; margin-bottom: 75px !important"  ng-show="customsms.length > 0" class="form-group">
+									     <div  class="col-sm-6 no-padd">
+			                              <label>Mobile Column <span class="red"> *</span> </label>
+			                              <select class="form-control" ng-model="obj.mobileColumn" ng-init="obj.mobileColumn = -1" ng-options="val as val for val in customsms[0]">
+			                               	<option value=""> Select mobile Column</option>
+			                              </select>
+			                             </div>
+								   </div>
+                                	
+                                    <textarea style="margin-top: 10px;" class="form-control" ng-trim="false" id="smsMessage" rows="4" ng-model="obj.smsMessage" ng-click="fetchdrafts()" ng-change="count(obj.smsMessage, false)" placeholder="Enter Engliesh message" ></textarea>
+                                    <textarea style="margin-top: 10px; display:none;" class="form-control" ng-trim="false"  id="encodedMessage" rows="4" ng-model="obj.smsMessage" ng-click="fetchdrafts()" ng-change="count(obj.smsMessage, false)" placeholder="Enter Engliesh message" ></textarea>
+                                    <p style="margin-bottom: 0;" class="text-primary">{{charcnt}} : Characters Used, Credits : {{creditscnt}}</p>
+                                    <div style="margin-top: 10px;" class="form-group">
+										<div class="col-sm-6 no-padd">
+	                                    <label>Schedule Requried :</label>
+	                                    <label class="radio-inline">
+											<input type="radio" name='thing' ng-model="date" value="no" data-toggle="date" data-id="yes-date" /> No
+	                                    </label>
+	                                    <label class="radio-inline">
+	                                        <input type="radio" name='thing' ng-model="date" value="yes" data-toggle="date" data-id="no-date" />Yes
+	                                    </label>
+										</div>
+										<div class="col-sm-6 no-padd none date" id="no-date"></div>
+										<div class="col-sm-6 no-padd none date" ng-hide="date == 'no'" ng-show="date == 'yes'" id="yes-date">
+											<span class="visible-xs"><div class="clearfix"></div><br/></span>
+											<div class="input-group" style="margin-top:-10px;">
+											  <span class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											  </span>
+											  <input type="datetime-local" name="date9" ng-model="obj.date" class="col-sm-12 form-control" value=""/>
+											</div><!-- /input-group -->
+										</div>
+										<div class="clearfix"></div><br/>
+	                                    <a type="button" class="btn btn-success btn-sm pull-right" ng-click="sendSms(obj)"><i class="fa fa-paper-plane"></i> Send</a>
+	                                    <a type="button" class="pull-right">&emsp;</a>
+	                                    <a type="button" class="btn btn-default btn-sm pull-right" ng-show="customsms.length > 0" ng-click="preview(obj)"><i class="fa fa-save"></i> Preview</a>
+	                                    <a type="button" class="btn btn-default btn-sm pull-right" ng-click="savedraft(obj.smsMessage)"><i class="fa fa-save"></i> Save Draft</a>
+										
+	                                </div>
+                                </div>
+                                <!-- /.panel-body -->
+
+                            </div>
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-6 -->
+                    <div class="col-lg-6">
+                        <div class="panel panel-warning" ng-if="obj.smsgroup == 'group'">
+                            <div class="panel-heading">
+                                Striped Rows
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body striped-scroll-v">
+                                <div class="table-responsive"  style="max-height:200px !important; overflow:auto ">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                            	<th></th>
+                                                <th>S.No.</th>
+                                                <th>Name</th>
+                                                <th>Number</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="contact in contacts track by $index">
+                                            	<td><input type="checkbox" ng-model="contact.selected" ng-change="changegrounumbers()" /></td>
+                                                <td>{{$index + 1}}</td>
+                                                <td>{{contact.contactName}}</td>
+                                                <td>{{contact.msisdn}}</td>
+                                            </tr>
+                                           <!--  <tr>
+                                                <td>2</td>
+                                                <td>Jacob</td>
+                                                <td>9966333532</td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <div class="panel panel-warning" ng-if="drafts.length > 0">
+                            <div class="panel-heading">
+                                <i class="fa fa-save fa-fw"></i> Saved Messages
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body  saved-scroll-v">
+                                <div class="alert alert-success alert-dismissable" ng-repeat="draft in drafts">
+                                    {{draft.draftMessage}}
+                                    <div class="row">
+                                        <a style="margin-left: 8px;" class="fa fa-trash-o pull-right" ></a>
+                                        <a class="fa fa-check pull-right" ng-click="obj.smsMessage = draft.draftMessage; count(draft.draftMessage, false);"></a>
+                                    </div>
+                                </div>
+                                <!-- <div class="alert alert-info alert-dismissable">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. askdjflak lkasdf dk jdlkfjskd ldsf.
+                                    <div class="row">
+                                        <a style="margin-left: 8px;" class="fa fa-trash-o pull-right" ></a>
+                                        <a class="fa fa-check pull-right" ></a>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning alert-dismissable">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. askdjflak lkasdf dk jdlkfjskd ldsf.
+                                    <div class="row">
+                                        <a style="margin-left: 8px;" class="fa fa-trash-o pull-right" ></a>
+                                        <a class="fa fa-check pull-right" ></a>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        
+                        <div class="panel panel-warning" ng-show="previewdata.length > 0">
+                            <div class="panel-heading">
+                                <i class="fa fa-save fa-fw"></i> Preview Messages
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body  saved-scroll-v">
+                                <div class="table-responsive">
+	                                <table class="table table-striped">
+	                                    <tbody>
+	                                    	<tr ng-repeat="(key, value) in previewdata"  ng-if="!$first">
+	                                    		<td><span ng-repeat="obj in value track by $index">{{obj}}</span></td>
+	                                    		<!-- <td>{{items}}</td> -->
+	                                    	</tr>
+	                                    </tbody>
+	                                </table>
+	                            </div>
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+
+                    </div>
+                    <!-- /.col-lg-6 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /#page-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <div th:replace="mainpages/layout/mainfooter :: footer">...</div> 
+        <script th:src="@{/mainpages/js/sms/smsapp.js}"></script>
+        <script type="text/javascript">
+			/* $(function(){
+				$('*[name=date9]').appendDtpicker({
+					"closeOnSelected": true
+				});
+			}); */
+		</script>
+	 
+		<script type="text/javascript">
+			$("#numbers-btn").click(function(){
+				$("#your-message").show();
+			});
+			
+			$("#group-btn").click(function(){
+				$("#your-message").hide();
+			});
+			
+			$("#custom-btn").click(function(){
+				$("#your-message").hide();
+			});
+			
+			$("#upload-file").click(function(){
+				$("#your-message").show();
+			});
+			$("#imagelink").click(function(){
+				$('#image').click();
+			});
+			
+			$("#videolink").click(function(){
+				$('#video').click();
+			});
+			
+			$("#filelink").click(function(){
+				$('#file').click();
+			});
+			
+		</script>   
+		<script type="text/javascript">
+			/* $(function() {
+				$('.multiselect-ui').multiselect({
+					includeSelectAllOption: true
+				});
+			}); */
+			
+			$(':radio').change(function (event) {
+				var id = $(this).data('id');
+				$('#' + id).addClass('none').siblings().removeClass('none');
+			});
+		</script>
+
+    </body>
+
+</html>

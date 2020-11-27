@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <div th:replace="mainpages/layout/mainhead :: head">...</div>
+
+    <body ng-app="senderidApp" ng-controller="SenderidsCntrl as ctrl" ng-cloak="true">
+
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <div th:replace="mainpages/layout/mainheader :: header">...</div>
+            <div th:replace="mainpages/layout/mainmenu :: menu">...</div>
+
+            
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">API's Document</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              Single SMS 
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                           Syntax : <br /><br />
+                            http://Your Domain:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXXXXXX&amp;msisdn=XXXXXXXX&amp;msg=XXXXXXXXX&amp;senderid=XXXXXX
+                          <br /><br />Example :<br /><br />
+                           http://139.59.22.192:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXXXXXX&amp;msisdn=XXXXXXXX&amp;msg=XXXXXXXXX&amp;senderid=XXXXXX
+                           <br /><br /> Response :<br /><br />
+									<p><responce> 
+									<message>
+									1RBHjbm8w7
+									</message> 
+									</responce></p>
+								</div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                          <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              Multiple SMS
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                          <div class="panel-body">
+                             Syntax : <br /><br />
+                            http://Your Domain:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXXXXXX&amp;msisdn=XXXXXXXXXX,XXXXXXXXXX,XXXXXXXXXX&amp;msg=XXXXXXXXX&amp;senderid=XXXXXX
+                          <br /><br />Example :<br /><br />
+                           http://139.59.22.192:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXX&amp;msisdn=XXXXXXXXXX,XXXXXXXXXX,XXXXXXXXXX&amp;msg=XXXXXXXXX&amp;senderid=XXXXXX
+                           <br /><br /> Response :<br /><br />
+									<p><responce> 
+									<message>
+									1RBHjbm8w7
+									</message> 
+									</responce></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                          <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                              Balance Check
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                          <div class="panel-body">
+                             Syntax : <br /><br />
+                            http://Your Domain:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXXXXXX
+                          <br /><br />Example :<br /><br />
+                          http://139.59.22.192:9091/SMSPANELAPI?username=XXXXXX&amp;pwd=XXXXX
+                           <br /><br /> Response :<br /><br />
+									<p><responce> 
+									<message>
+									100000
+									</message> 
+									</responce></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            
+        </div>
+        <!-- /#page-wrapper -->
+            
+        
+       
+</div>
+
+    </body>
+
+    <div th:replace="mainpages/layout/mainfooter :: footer">...</div>
+    <script th:src="@{/mainpages/js/senderid/senderidapp.js}"></script>
+</html>
+
